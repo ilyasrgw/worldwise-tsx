@@ -1,0 +1,40 @@
+{
+  "cities": [
+    {
+      "id": "4aee",
+      "cityName": "Paris",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2024-05-15T13:02:47.219Z",
+      "notes": "",
+      "position": {
+        "lat": "48.83223491750913",
+        "lng": "2.3435966384577616"
+      }
+    },
+    {
+      "id": "8c47",
+      "cityName": "Garcirrey",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2024-08-30T10:34:18.008Z",
+      "notes": "",
+      "position": {
+        "lat": "40.883122671697734",
+        "lng": "-6.152343750000001"
+      }
+    },
+    {
+      "id": "67af",
+      "cityName": "Banos de Valdearados",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2024-09-02T10:44:42.397Z",
+      "notes": "asfsa",
+      "position": {
+        "lat": "41.773605650300816",
+        "lng": "-3.5595703125"
+      }
+    }
+  ]
+}
