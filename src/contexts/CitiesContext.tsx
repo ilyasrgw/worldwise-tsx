@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   createContext,
   useCallback,
@@ -7,16 +8,52 @@ import {
 } from "react";
 const BASE_URL = "http://localhost:8000";
 
-const CitiesContext = createContext();
+interface City {
+  id: number;
+  name: string;
+}
+
+interface CitiesProvidedProps {
+  children: ReactNode;
+}
+
+interface CitiesContextType {
+  cities: City[];
+  isLoading: boolean;
+  currentCity: City | {};
+  error: string;
+  getCity: (id: number) => void;
+  createCity: (newCity: City) => void;
+  deleteCity: (id: number) => void;
+}
+const defaultContextValue: CitiesContextType = {
+  cities: [],
+  isLoading: false,
+  currentCity: {},
+  error: "",
+  getCity: () => {},
+  createCity: () => {},
+  deleteCity: () => {},
+};
+
+const CitiesContext = createContext<CitiesContextType>(defaultContextValue);
 
 const initialState = {
-  cities: [],
+  cities: [] as City[],
   isLoading: false,
   currentCity: {},
   error: "",
 };
 
-function reducer(state, action) {
+type Action =
+  | { type: "loading" }
+  | { type: "cities/loaded"; payload: City[] }
+  | { type: "city/loaded"; payload: City }
+  | { type: "city/created"; payload: City }
+  | { type: "city/deleted"; payload: number }
+  | { type: "rejected"; payload: string };
+
+function reducer(state: typeof initialState, action: Action) {
   switch (action.type) {
     case "loading":
       return {
@@ -60,7 +97,7 @@ function reducer(state, action) {
   }
 }
 
-function CitiesProvider({ children }) {
+function CitiesProvider({ children }: CitiesProvidedProps) {
   const [{ cities, isLoading, currentCity, error }, dispatch] = useReducer(
     reducer,
     initialState
@@ -87,8 +124,9 @@ function CitiesProvider({ children }) {
   }, []);
 
   const getCity = useCallback(
-    async function getCity(id) {
-      if (Number(id) === currentCity.id) return;
+    async function getCity(id: number) {
+      if (currentCity && "id" in currentCity && Number(id) === currentCity.id)
+        return;
 
       dispatch({ type: "loading" });
       try {
@@ -102,9 +140,9 @@ function CitiesProvider({ children }) {
         });
       }
     },
-    [currentCity.id]
+    [currentCity]
   );
-  async function createCity(newCity) {
+  async function createCity(newCity: City) {
     dispatch({ type: "loading" });
     try {
       const res = await fetch(`${BASE_URL}/cities/`, {
@@ -123,7 +161,7 @@ function CitiesProvider({ children }) {
       });
     }
   }
-  async function deleteCity(id) {
+  async function deleteCity(id: number) {
     dispatch({ type: "loading" });
     try {
       await fetch(`${BASE_URL}/cities/${id}`, {

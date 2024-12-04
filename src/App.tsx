@@ -54,7 +54,6 @@ function App() {
               <Route path="pricing" element={<Pricing />} />
               <Route path="login" element={<Login />} />
               <Route path="*" element={<PageNotFound />} />
-              
             </Routes>
           </Suspense>
         </BrowserRouter>
